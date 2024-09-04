@@ -45,8 +45,8 @@
         },
         dialogVisible: false,
         dialogImageUrl:null,
-        useOss:false, //使用oss->true;使用MinIO->false
-        ossUploadUrl:'http://macro-oss.oss-cn-shenzhen.aliyuncs.com',
+        useOss:true, //使用oss->true;使用MinIO->false
+        ossUploadUrl:'http://mall-entry-point-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com',
         minioUploadUrl:'http://localhost:8080/minio/upload',
       };
     },

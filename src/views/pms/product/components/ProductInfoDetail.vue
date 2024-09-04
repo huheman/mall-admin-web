@@ -127,6 +127,7 @@
       //处理编辑逻辑
       handleEditCreated(){
         if(this.value.productCategoryId!=null){
+          this.selectProductCateValue = []
           this.selectProductCateValue.push(this.value.cateParentId);
           this.selectProductCateValue.push(this.value.productCategoryId);
         }
