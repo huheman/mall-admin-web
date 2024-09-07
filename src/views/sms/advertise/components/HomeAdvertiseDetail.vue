@@ -42,8 +42,8 @@
       <el-form-item label="排序：">
         <el-input v-model="homeAdvertise.sort" class="input-width"></el-input>
       </el-form-item>
-      <el-form-item label="广告链接：" prop="url">
-        <el-input v-model="homeAdvertise.url" class="input-width"></el-input>
+      <el-form-item label="广告内容：" prop="url">
+        <single-upload v-model="homeAdvertise.url"></single-upload>
       </el-form-item>
       <el-form-item label="广告备注：">
         <el-input
@@ -66,7 +66,7 @@
   import {createHomeAdvertise, getHomeAdvertise, updateHomeAdvertise} from '@/api/homeAdvertise'
   const defaultTypeOptions = [
     {
-      label: 'PC首页轮播',
+      label: 'APP底部宣传',
       value: 0
     },
     {

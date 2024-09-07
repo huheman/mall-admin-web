@@ -150,7 +150,7 @@
   };
   const defaultTypeOptions = [
     {
-      label: 'PC首页轮播',
+      label: 'APP底部宣传',
       value: 0
     },
     {
@@ -185,7 +185,7 @@
         if(type===1){
           return 'APP首页轮播';
         }else{
-          return 'PC首页轮播';
+          return 'APP底部宣传';
         }
       },
       formatTime(time){
