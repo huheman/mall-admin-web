@@ -124,7 +124,7 @@
           </div>
         </el-card>
       </el-form-item>
-      <el-form-item label="商品参数：">
+      <!-- <el-form-item label="商品参数：">
         <el-card shadow="never" class="cardBg">
           <div v-for="(item,index) in selectProductParam" :class="{littleMarginTop:index!==0}">
             <div class="paramInputLabel">{{item.name}}:</div>
@@ -139,7 +139,7 @@
             <el-input v-else class="paramInput" v-model="selectProductParam[index].value"></el-input>
           </div>
         </el-card>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="商品相册：">
         <multi-upload v-model="selectProductPics"></multi-upload>
       </el-form-item>
