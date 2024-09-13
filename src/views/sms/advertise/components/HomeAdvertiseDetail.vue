@@ -44,6 +44,7 @@
       </el-form-item>
       <el-form-item label="广告内容：" prop="url">
         <single-upload v-model="homeAdvertise.url"></single-upload>
+        <el-input :autosize="true" v-model="homeAdvertise.url"></el-input>
       </el-form-item>
       <el-form-item label="广告备注：">
         <el-input
@@ -103,7 +104,7 @@
             {min: 2, max: 140, message: '长度在 2 到 140 个字符', trigger: 'blur'}
           ],
           url: [
-            {required: true, message: '请输入广告链接', trigger: 'blur'}
+            {required: false, message: '请输入广告链接', trigger: 'blur'}
           ],
           startTime: [
             {required: true, message: '请选择开始时间', trigger: 'blur'}

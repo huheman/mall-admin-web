@@ -56,8 +56,9 @@
       <el-form-item label="关键词：">
         <el-input v-model="productCate.keywords"></el-input>
       </el-form-item>
-      <el-form-item label="分类描述：">
-        <el-input type="textarea" :autosize="true" v-model="productCate.description"></el-input>
+      <el-form-item label="首页图标：">
+        <single-upload v-model="productCate.description"></single-upload>
+        <!-- <el-input type="textarea" :autosize="true" v-model="productCate.description"></el-input> -->
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('productCateFrom')">提交</el-button>
