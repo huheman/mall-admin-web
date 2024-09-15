@@ -22,7 +22,7 @@ def main():
     run_command(ssh_rm_command)
 
     # 使用 SCP 上传文件
-    scp_command = "scp -r D:/project/page/mall-admin-web/dist/ root@192.168.1.34:/root/env_dev/nginx/html/mall-admin/"
+    scp_command = "scp -r ./dist/ root@192.168.1.34:/root/env_dev/nginx/html/mall-admin/"
     run_command(scp_command)
 
     print("部署完成！")

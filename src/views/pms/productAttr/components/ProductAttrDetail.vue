@@ -14,26 +14,26 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="分类筛选样式:">
+      <el-form-item label="是否加密显示:" >
         <el-radio-group v-model="productAttr.filterType">
           <el-radio :label="0">普通</el-radio>
-          <el-radio :label="1">颜色</el-radio>
+          <el-radio :label="1">加密</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="能否进行检索:">
+      <el-form-item label="能否进行检索:"  v-show="false">
         <el-radio-group v-model="productAttr.searchType">
           <el-radio :label="0">不需要检索</el-radio>
           <el-radio :label="1">关键字检索</el-radio>
           <el-radio :label="2">范围检索</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="商品属性关联:">
+      <el-form-item label="商品属性关联:" v-show="false">
         <el-radio-group v-model="productAttr.relatedStatus">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="0">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="属性是否可选:">
+      <el-form-item label="属性是否可选:" v-show="false">
         <el-radio-group v-model="productAttr.selectType">
           <el-radio :label="0">唯一</el-radio>
           <el-radio :label="1">单选</el-radio>
@@ -46,10 +46,10 @@
           <el-radio :label="1">从下面列表中选择</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="属性值可选值列表:">
+      <el-form-item label="属性值可选值列表:" v-show="productAttr.inputType==1">
         <el-input :autosize="true" type="textarea" v-model="inputListFormat"></el-input>
       </el-form-item>
-      <el-form-item label="是否支持手动新增:">
+      <el-form-item label="是否只能录入数字:" v-show="productAttr.inputType==0">
         <el-radio-group v-model="productAttr.handAddStatus">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="0">否</el-radio>
