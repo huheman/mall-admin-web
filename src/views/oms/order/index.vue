@@ -16,8 +16,11 @@
           <el-form-item label="输入搜索：">
             <el-input v-model="listQuery.orderSn" class="input-width" placeholder="订单编号"></el-input>
           </el-form-item>
-          <el-form-item label="手机号：">
+          <el-form-item label="收货人手机号：" v-show="false">
             <el-input v-model="listQuery.receiverKeyword" class="input-width" placeholder="手机号码"></el-input>
+          </el-form-item>
+          <el-form-item label="下单人手机号：">
+            <el-input v-model="listQuery.payerPhone" class="input-width" placeholder="下单人手机号"></el-input>
           </el-form-item>
           <el-form-item label="提交时间：">
             <el-date-picker class="input-width" v-model="listQuery.createTime" value-format="yyyy-MM-dd" type="date"
@@ -74,8 +77,8 @@
         <el-table-column label="提交时间" width="180" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
         </el-table-column>
-        <el-table-column label="用户手机号" width="180" align="center">
-          <template slot-scope="scope">{{maskPhoneNumber(scope.row.receiverPhone)}}</template>
+        <el-table-column label="下单人手机号" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
         </el-table-column>
         <el-table-column label="订单金额"  align="center">
           <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
@@ -93,7 +96,7 @@
           <template slot-scope="scope">{{scope.row.payAmount}}</template>
         </el-table-column>
         <el-table-column label="充值方式" align="center">
-          <template slot-scope="scope">{{formatChargeType(scope.row.receiverDetailAddress)}}</template>
+          <template slot-scope="scope">{{scope.row.moreInfo && formatChargeType(JSON.parse(scope.row.moreInfo).attr)}}</template>
         </el-table-column>
         <el-table-column label="支付方式" width="120" align="center">
           <template slot-scope="scope">{{scope.row.payType | formatPayType}}</template>
@@ -148,6 +151,7 @@
   </div>
 </template>
 <script>
+    import {deliveryOrder} from '@/api/order'
   import {
     fetchList,
     closeOrder,
@@ -292,7 +296,6 @@
     },
     methods: {
       formatChargeType(receiverDetailAddress){
-        console.log(receiverDetailAddress)
         if(!receiverDetailAddress){
           return
         }
@@ -337,12 +340,31 @@
       },
       handleDeliveryOrder(index, row) {
         let listItem = this.covertOrder(row);
-        this.$router.push({
-          path: '/oms/deliverOrderList',
-          query: {
-            list: [listItem]
-          }
-        })
+        // this.$router.push({
+        //   path: '/oms/deliverOrderList',
+        //   query: {
+        //     list: [listItem]
+        //   }
+        // })
+        this.$confirm('是否要进行发货操作?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deliveryOrder([listItem]).then(response=>{
+            // this.$router.back();
+            this.$message({
+              type: 'success',
+              message: '发货成功!'
+            });
+            this.getList()
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消发货'
+          });
+        });
       },
       handleViewLogistics(index, row) {
         this.logisticsDialogVisible = true;
@@ -377,12 +399,25 @@
             });
             return;
           }
-          this.$router.push({
-            path: '/oms/deliverOrderList',
-            query: {
-              list: list
-            }
-          })
+          this.$confirm('是否要进行发货操作?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            deliveryOrder(list).then(response=>{
+              // this.$router.back();
+              this.$message({
+                type: 'success',
+                message: '发货成功!'
+              });
+              this.getList()
+            });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消发货'
+            });
+          });
         } else if (this.operateType === 2) {
           //关闭订单
           this.closeOrder.orderIds = [];
