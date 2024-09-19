@@ -115,7 +115,7 @@
           @click="handleSyncProductSkuStock">同步库存
         </el-button>
       </el-form-item>
-      <el-form-item label="属性图片：" v-if="hasAttrPic">
+      <el-form-item label="属性图片：" v-if="hasAttrPic" v-show="false">
         <el-card shadow="never" class="cardBg">
           <div v-for="(item,index) in selectProductAttrPics">
             <span>{{item.name}}:</span>
@@ -465,6 +465,7 @@
       refreshProductSkuList() {
         this.value.skuStockList = [];
         let skuList = this.value.skuStockList;
+        console.log(this.selectProductAttr)
         //只有一个属性时
         if (this.selectProductAttr.length === 1) {
           let attr = this.selectProductAttr[0];
