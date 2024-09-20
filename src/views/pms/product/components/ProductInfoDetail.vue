@@ -26,33 +26,33 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="商品介绍：">
+      <el-form-item label="商品介绍：" v-show="false">
         <el-input
           :autoSize="true"
           v-model="value.description"
           type="textarea"
           placeholder="请输入内容"></el-input>
       </el-form-item>
-      <el-form-item label="商品货号：">
+      <el-form-item label="商品货号：" v-show="false">
         <el-input v-model="value.productSn"></el-input>
       </el-form-item>
-      <el-form-item label="商品售价：">
+      <el-form-item label="商品售价：" v-show="false">
         <el-input v-model="value.price"></el-input>
       </el-form-item>
-      <el-form-item label="市场价：">
+      <el-form-item label="市场价：" v-show="false">
         <el-input v-model="value.originalPrice"></el-input>
       </el-form-item>
-      <el-form-item label="商品库存：">
+      <el-form-item label="商品库存：" v-show="false">
         <el-input v-model="value.stock"></el-input>
       </el-form-item>
-      <el-form-item label="计量单位：">
+      <el-form-item label="计量单位：" v-show="false">
         <el-input v-model="value.unit"></el-input>
       </el-form-item>
-      <el-form-item label="商品重量：">
+      <el-form-item label="商品重量：" v-show="false">
         <el-input v-model="value.weight" style="width: 300px"></el-input>
         <span style="margin-left: 20px">克</span>
       </el-form-item>
-      <el-form-item label="排序">
+      <el-form-item label="排序" >
         <el-input v-model="value.sort"></el-input>
       </el-form-item>
       <el-form-item style="text-align: center">
@@ -155,6 +155,11 @@
           for (let i = 0; i < brandList.length; i++) {
             this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
           }
+          if (!this.value.brandId){
+            this.value.brandId=this.brandOptions[0].value
+            this.handleBrandChange(this.brandOptions[0].value)
+          }
+
         });
       },
       getCateNameById(id){

@@ -141,9 +141,10 @@
         </el-card>
       </el-form-item> -->
       <el-form-item label="商品相册：">
-        <multi-upload v-model="selectProductPics"></multi-upload>
+        <single-upload v-model="value.pic"></single-upload>
+        <!-- <multi-upload v-model="selectProductPics"></multi-upload> -->
       </el-form-item>
-      <el-form-item label="商品详情：">
+      <el-form-item label="商品详情：" v-show="false">
         <el-tabs v-model="activeHtmlName" type="card">
           <el-tab-pane label="电脑端详情" name="pc">
             <tinymce :width="595" :height="300" v-model="value.detailHtml"></tinymce>
@@ -155,7 +156,8 @@
       </el-form-item>
       <el-form-item style="text-align: center">
         <el-button size="medium" @click="handlePrev">上一步，填写商品促销</el-button>
-        <el-button type="primary" size="medium" @click="handleNext">下一步，选择商品关联</el-button>
+        <el-button type="primary" size="medium" @click="handleFinishCommit">完成，提交商品</el-button>
+        <!-- <el-button type="primary" size="medium" @click="handleNext">下一步，选择商品关联</el-button> -->
       </el-form-item>
     </el-form>
   </div>
@@ -256,6 +258,9 @@
       }
     },
     methods: {
+      handleFinishCommit(){
+        this.$emit('finishCommit',this.isEdit);
+      },
       handleEditCreated() {
         //根据商品属性分类id获取属性和参数
         if(this.value.productAttributeCategoryId!=null){
