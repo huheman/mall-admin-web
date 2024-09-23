@@ -10,10 +10,10 @@
       <el-form-item label="商品名称：" prop="name">
         <el-input v-model="value.name"></el-input>
       </el-form-item>
-      <el-form-item label="副标题：" prop="subTitle">
+      <el-form-item label="副标题：" prop="subTitle" v-if="false">
         <el-input v-model="value.subTitle"></el-input>
       </el-form-item>
-      <el-form-item label="商品品牌：" prop="brandId">
+      <el-form-item label="商品品牌：" prop="brandId" v-show="false">
         <el-select
           v-model="value.brandId"
           @change="handleBrandChange"
@@ -56,7 +56,7 @@
         <el-input v-model="value.sort"></el-input>
       </el-form-item>
       <el-form-item style="text-align: center">
-        <el-button type="primary" size="medium" @click="handleNext('productInfoForm')">下一步，填写商品促销</el-button>
+        <!-- <el-button type="primary" size="medium" @click="handleNext('productInfoForm')">下一步，填写商品促销</el-button> -->
       </el-form-item>
     </el-form>
   </div>

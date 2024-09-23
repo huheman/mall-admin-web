@@ -1,15 +1,8 @@
 <template> 
   <div>
-    <el-upload
-      :action="useOss?ossUploadUrl:minioUploadUrl"
-      :data="useOss?dataObj:null"
-      list-type="picture"
-      :multiple="false" :show-file-list="showFileList"
-      :file-list="fileList"
-      :before-upload="beforeUpload"
-      :on-remove="handleRemove"
-      :on-success="handleUploadSuccess"
-      :on-preview="handlePreview">
+    <el-upload :action="useOss?ossUploadUrl:minioUploadUrl" :data="useOss?dataObj:null" list-type="picture"
+      :multiple="false" :show-file-list="showFileList" :file-list="fileList" :before-upload="beforeUpload"
+      :on-remove="handleRemove" :on-success="handleUploadSuccess" :on-preview="handlePreview">
       <el-button size="small" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
     </el-upload>
@@ -19,7 +12,9 @@
   </div>
 </template>
 <script>
-  import {policy} from '@/api/oss'
+  import {
+    policy
+  } from '@/api/oss'
 
   export default {
     name: 'singleUpload',
@@ -44,11 +39,10 @@
         }]
       },
       showFileList: {
-        get: function () {
-          return this.value !== null && this.value !== ''&& this.value!==undefined;
+        get: function() {
+          return this.value !== null && this.value !== '' && this.value !== undefined;
         },
-        set: function (newValue) {
-        }
+        set: function(newValue) {}
       }
     },
     data() {
@@ -60,12 +54,16 @@
           ossaccessKeyId: '',
           dir: '',
           host: '',
+          key: ''
           // callback:'',
         },
         dialogVisible: false,
-        useOss:true, //使用oss->true;使用MinIO->false
-        ossUploadUrl:'http://mall-entry-point-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com',
-        minioUploadUrl:'http://localhost:8080/minio/upload',
+        useOss: true, //使用oss->true;使用MinIO->false
+        ossUploadUrl: process.env.NODE_ENV == 'development' ?
+          'http://mall-entry-point-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com' :
+          "http://prd-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com",
+        // ossUploadUrl:process.env.OSS_UPLOAD_URL,
+        minioUploadUrl: 'http://localhost:8080/minio/upload',
       };
     },
     methods: {
@@ -78,18 +76,29 @@
       handlePreview(file) {
         this.dialogVisible = true;
       },
+      generateRandomString(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      },
       beforeUpload(file) {
         let _self = this;
-        if(!this.useOss){
+        if (!this.useOss) {
           //不使用oss不需要获取策略
           return true;
         }
         return new Promise((resolve, reject) => {
           policy().then(response => {
+            this.key = this.generateRandomString(20)+file.name.substring(file.name.lastIndexOf('.'));
+            console.log(this.key)
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
             _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
+            _self.dataObj.key = response.data.dir + '/'+this.key;
             _self.dataObj.dir = response.data.dir;
             _self.dataObj.host = response.data.host;
             // _self.dataObj.callback = response.data.callback;
@@ -103,12 +112,15 @@
       handleUploadSuccess(res, file) {
         this.showFileList = true;
         this.fileList.pop();
-        let url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
-        if(!this.useOss){
+        let url = this.dataObj.host + '/' + this.dataObj.dir + '/' + this.key
+        if (!this.useOss) {
           //不使用oss直接获取图片路径
           url = res.data.url;
         }
-        this.fileList.push({name: file.name, url: url});
+        this.fileList.push({
+          name: file.name,
+          url: url
+        });
         this.emitInput(this.fileList[0].url);
       }
     }
@@ -117,5 +129,3 @@
 <style>
 
 </style>
-
-

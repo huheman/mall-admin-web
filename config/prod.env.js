@@ -1,5 +1,2 @@
 'use strict'
-module.exports = {
-  NODE_ENV: '"production"',
-  BASE_API: '"https://www.huhp.cc/api/mall-admin"'
-}
+module.exports = {  NODE_ENV: '"development"',  BASE_API: '"http://localhost:8201/mall-admin"'}

@@ -18,19 +18,19 @@
         <el-table-column label="编号" width="100" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="分类名称" align="center">
+        <el-table-column label="游戏名称" align="center">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
         <el-table-column label="级别" width="100" align="center">
           <template slot-scope="scope">{{scope.row.level | levelFilter}}</template>
         </el-table-column>
-        <el-table-column label="商品数量" width="100" align="center">
+        <!-- <el-table-column label="商品数量" width="100" align="center">
           <template slot-scope="scope">{{scope.row.productCount }}</template>
         </el-table-column>
         <el-table-column label="数量单位" width="100" align="center">
           <template slot-scope="scope">{{scope.row.productUnit }}</template>
-        </el-table-column>
-        <el-table-column label="导航栏" width="100" align="center">
+        </el-table-column> -->
+        <el-table-column label="游戏页推荐" width="100" align="center">
           <template slot-scope="scope">
             <el-switch
               @change="handleNavStatusChange(scope.$index, scope.row)"
@@ -40,7 +40,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="是否显示" width="100" align="center">
+        <el-table-column label="首页推荐" width="100" align="center">
           <template slot-scope="scope">
             <el-switch
               @change="handleShowStatusChange(scope.$index, scope.row)"
@@ -62,7 +62,7 @@
             </el-button>
             <el-button
               size="mini"
-              @click="handleTransferProduct(scope.$index, scope.row)">转移商品
+              @click="handleTransferProduct(scope.$index, scope.row)" v-show="false">转移商品
             </el-button>
           </template>
         </el-table-column>

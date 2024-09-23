@@ -71,19 +71,19 @@
         <el-table-column label="编号" width="80" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="订单编号" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.orderSn}}</template>
+
+        <el-table-column label="订单标题" width="180" align="center">
+          <template slot-scope="scope">{{formatTitle(scope.row)}}</template>
         </el-table-column>
-        <el-table-column label="提交时间" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
-        </el-table-column>
+
         <el-table-column label="下单人手机号" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
+          <template
+            slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
         </el-table-column>
-        <el-table-column label="订单金额"  align="center">
+        <el-table-column label="订单金额" align="center">
           <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
         </el-table-column>
-        <el-table-column label="促销信息" width="280" align="center">
+        <el-table-column label="促销信息"  align="center">
           <template slot-scope="scope">{{scope.row.promotionInfo}}</template>
         </el-table-column>
         <el-table-column label="促销减免" align="center">
@@ -92,11 +92,12 @@
         <el-table-column label="优惠券减免" align="center">
           <template slot-scope="scope">{{scope.row.couponAmount}}</template>
         </el-table-column>
-        <el-table-column label="实付金额"  align="center">
+        <el-table-column label="实付金额" align="center">
           <template slot-scope="scope">{{scope.row.payAmount}}</template>
         </el-table-column>
         <el-table-column label="充值方式" align="center">
-          <template slot-scope="scope">{{scope.row.moreInfo && formatChargeType(JSON.parse(scope.row.moreInfo).attr)}}</template>
+          <template
+            slot-scope="scope">{{scope.row.moreInfo && formatChargeType(JSON.parse(scope.row.moreInfo).attr)}}</template>
         </el-table-column>
         <el-table-column label="支付方式" width="120" align="center">
           <template slot-scope="scope">{{scope.row.payType | formatPayType}}</template>
@@ -107,17 +108,29 @@
         <el-table-column label="订单状态" width="120" align="center">
           <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="直充结果" width="120" align="center">
+          <template slot-scope="scope">{{formatDirectCharge(scope.row)}}</template>
+        </el-table-column>
+
+        <el-table-column label="提交时间" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
+        </el-table-column>
+        <el-table-column label="订单编号" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.orderSn}}</template>
+        </el-table-column>
+        <el-table-column label="操作" width="300" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleViewOrder(scope.$index, scope.row)">查看订单</el-button>
             <el-button size="mini" @click="handleCloseOrder(scope.$index, scope.row)"
               v-show="scope.row.status===0">关闭订单</el-button>
             <el-button size="mini" @click="handleDeliveryOrder(scope.$index, scope.row)"
               v-show="scope.row.status===1">订单发货</el-button>
-            <el-button size="mini" @click="handleViewLogistics(scope.$index, scope.row)"
-              v-show="scope.row.status===2||scope.row.status===3">订单跟踪</el-button>
-            <el-button size="mini" type="danger" @click="handleDeleteOrder(scope.$index, scope.row)"
-              v-show="scope.row.status===4">删除订单</el-button>
+            <el-button size="mini" type="danger" @click="handleRefound(scope.$index, scope.row)"
+              v-show="scope.row.status===1||scope.row.status===2||scope.row.status===3">手动退款</el-button>
+            <!-- <el-button size="mini" @click="handleViewLogistics(scope.$index, scope.row)"
+              v-show="scope.row.status===2||scope.row.status===3">订单跟踪</el-button> -->
+            <!-- <el-button size="mini" type="danger" @click="handleDeleteOrder(scope.$index, scope.row)"
+              v-show="scope.row.status===4">删除订单</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -151,7 +164,9 @@
   </div>
 </template>
 <script>
-    import {deliveryOrder} from '@/api/order'
+  import {
+    deliveryOrder
+  } from '@/api/order'
   import {
     fetchList,
     closeOrder,
@@ -189,8 +204,7 @@
           content: null,
           orderIds: []
         },
-        chargeTypeOptions:[
-          {
+        chargeTypeOptions: [{
             label: '直充',
             value: '直充'
           },
@@ -295,14 +309,28 @@
       },
     },
     methods: {
-      formatChargeType(receiverDetailAddress){
-        if(!receiverDetailAddress){
+      formatTitle(row) {
+        if (row.moreInfo) {
+          return JSON.parse(row.moreInfo).title
+        }
+      },
+      formatDirectCharge(row) {
+        if (row.directChargeStatus == 1) {
+          return '充值中'
+        } else if (row.directChargeStatus == 3) {
+          return '充值失败:' + row.directChargeFailReason
+        } else if (row.directChargeStatus == 2) {
+          return '充值成功'
+        }
+      },
+      formatChargeType(receiverDetailAddress) {
+        if (!receiverDetailAddress) {
           return
         }
-        if(receiverDetailAddress.indexOf('直充')>=0) {
+        if (receiverDetailAddress.indexOf('直充') >= 0) {
           return '直充'
         }
-        if(receiverDetailAddress.indexOf('代充')>=0){
+        if (receiverDetailAddress.indexOf('代充') >= 0) {
           return '代充'
         }
       },
@@ -338,6 +366,9 @@
         this.closeOrder.dialogVisible = true;
         this.closeOrder.orderIds = [row.id];
       },
+      handleRefound(index, row){
+        console.log(row)
+      },
       handleDeliveryOrder(index, row) {
         let listItem = this.covertOrder(row);
         // this.$router.push({
@@ -351,7 +382,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deliveryOrder([listItem]).then(response=>{
+          deliveryOrder([listItem]).then(response => {
             // this.$router.back();
             this.$message({
               type: 'success',
@@ -404,7 +435,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            deliveryOrder(list).then(response=>{
+            deliveryOrder(list).then(response => {
               // this.$router.back();
               this.$message({
                 type: 'success',
