@@ -80,7 +80,7 @@
           <template slot-scope="scope">{{scope.row.couponCode}}</template>
         </el-table-column>
         <el-table-column label="领取会员" width="140" align="center">
-          <template slot-scope="scope">{{scope.row.memberNickname}}</template>
+          <template slot-scope="scope">{{scope.row.phone}}</template>
         </el-table-column>
         <el-table-column label="领取方式" width="100" align="center">
           <template slot-scope="scope">{{scope.row.getType | formatGetType}}</template>

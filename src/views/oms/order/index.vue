@@ -108,7 +108,7 @@
         </el-table-column>
         <el-table-column label="下单人手机号" width="180" align="center">
           <template
-            slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
+            slot-scope="scope">{{scope.row.moreInfo && JSON.parse(scope.row.moreInfo).payerPhone}}</template>
         </el-table-column>
         <el-table-column label="订单金额" align="center">
           <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
