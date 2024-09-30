@@ -129,7 +129,7 @@
         if (this.$route.query.parentId != null) {
           this.parentId = this.$route.query.parentId;
         } else {
-          this.parentId = 0;
+          this.parentId = 56;
         }
       },
       handleAddProductCate() {

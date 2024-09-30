@@ -46,8 +46,10 @@
           dir: '',
           host: ''
         },
-        useOss:false, //使用oss->true;使用MinIO->false
-        ossUploadUrl:'http://macro-oss.oss-cn-shenzhen.aliyuncs.com',
+        useOss:true, //使用oss->true;使用MinIO->false
+        ossUploadUrl: process.env.NODE_ENV == 'development' ?
+          'http://mall-entry-point-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com' :
+          "http://prd-1704301250797321.oss-cn-guangzhou.oss-accesspoint.aliyuncs.com",
         minioUploadUrl:'http://localhost:8080/minio/upload',
       }
     },
@@ -72,7 +74,7 @@
         const objKeyArr = Object.keys(this.listObj)
         for (let i = 0, len = objKeyArr.length; i < len; i++) {
           if (this.listObj[objKeyArr[i]].uid === uid) {
-            this.listObj[objKeyArr[i]].url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
+            this.listObj[objKeyArr[i]].url = this.dataObj.host + '/' + this.dataObj.dir + '/' + this.key;
             if(!this.useOss){
               //不使用oss直接获取图片路径
               this.listObj[objKeyArr[i]].url = response.data.url;
@@ -92,6 +94,15 @@
           }
         }
       },
+      generateRandomString(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      },
       beforeUpload(file) {
         const _self = this
         const fileName = file.uid;
@@ -103,10 +114,11 @@
         }
         return new Promise((resolve, reject) => {
           policy().then(response => {
+            this.key = this.generateRandomString(20)+file.name.substring(file.name.lastIndexOf('.'));
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
             _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
+            _self.dataObj.key = response.data.dir + '/'+this.key;
             _self.dataObj.dir = response.data.dir;
             _self.dataObj.host = response.data.host;
             _self.listObj[fileName] = {hasSuccess: false, uid: file.uid, width: this.width, height: this.height};

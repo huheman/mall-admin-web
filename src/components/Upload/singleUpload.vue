@@ -94,7 +94,6 @@
         return new Promise((resolve, reject) => {
           policy().then(response => {
             this.key = this.generateRandomString(20)+file.name.substring(file.name.lastIndexOf('.'));
-            console.log(this.key)
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
             _self.dataObj.ossaccessKeyId = response.data.accessKeyId;

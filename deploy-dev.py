@@ -2,7 +2,7 @@ from base import publish
 
 ip = '192.168.1.34'
 env='development'
-base_api='https://www.huhp.cc/api/mall-admin'
+base_api='https://www.huhp.cc/apidev/mall-admin'
 
 
 def main():

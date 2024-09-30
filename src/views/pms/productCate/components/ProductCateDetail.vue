@@ -43,7 +43,7 @@
       <el-form-item label="游戏图标：">
         <single-upload v-model="productCate.icon"></single-upload>
       </el-form-item>
-      <el-form-item label="关联类型：">
+      <el-form-item label="关联类型：" prop="productCount">
         <el-select v-model="productCate.productCount"
                    placeholder="请选择类型">
           <el-option
@@ -115,7 +115,10 @@
         rules: {
           name: [
             {required: true, message: '请输入品牌名称', trigger: 'blur'},
-            {min: 2, max: 140, message: '长度在 2 到 140 个字符', trigger: 'blur'}
+            {min: 2, max: 140, message: '长度在 2 到 140 个字符', trigger: 'blur'},
+          ],
+          productCount:[
+            {required: true, message: '请输入关联类型'},
           ]
         },
         filterAttrs: [],

@@ -68,29 +68,12 @@
       <el-table ref="orderTable" :data="list" style="width: 100%;" @selection-change="handleSelectionChange"
         v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="80" align="center">
+        <el-table-column label="标号" width="80" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
 
         <el-table-column label="订单标题" width="180" align="center">
           <template slot-scope="scope">{{formatTitle(scope.row)}}</template>
-        </el-table-column>
-
-        <el-table-column label="下单人手机号" width="180" align="center">
-          <template
-            slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
-        </el-table-column>
-        <el-table-column label="订单金额" align="center">
-          <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
-        </el-table-column>
-        <el-table-column label="促销信息"  align="center">
-          <template slot-scope="scope">{{scope.row.promotionInfo}}</template>
-        </el-table-column>
-        <el-table-column label="促销减免" align="center">
-          <template slot-scope="scope">{{scope.row.promotionAmount}}</template>
-        </el-table-column>
-        <el-table-column label="优惠券减免" align="center">
-          <template slot-scope="scope">{{scope.row.couponAmount}}</template>
         </el-table-column>
         <el-table-column label="实付金额" align="center">
           <template slot-scope="scope">{{scope.row.payAmount}}</template>
@@ -102,21 +85,8 @@
         <el-table-column label="支付方式" width="120" align="center">
           <template slot-scope="scope">{{scope.row.payType | formatPayType}}</template>
         </el-table-column>
-        <el-table-column label="订单来源" width="120" align="center">
-          <template slot-scope="scope">{{scope.row.sourceType | formatSourceType}}</template>
-        </el-table-column>
         <el-table-column label="订单状态" width="120" align="center">
           <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
-        </el-table-column>
-        <el-table-column label="直充结果" width="120" align="center">
-          <template slot-scope="scope">{{formatDirectCharge(scope.row)}}</template>
-        </el-table-column>
-
-        <el-table-column label="提交时间" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
-        </el-table-column>
-        <el-table-column label="订单编号" width="180" align="center">
-          <template slot-scope="scope">{{scope.row.orderSn}}</template>
         </el-table-column>
         <el-table-column label="操作" width="300" align="center">
           <template slot-scope="scope">
@@ -125,14 +95,44 @@
               v-show="scope.row.status===0">关闭订单</el-button>
             <el-button size="mini" @click="handleDeliveryOrder(scope.$index, scope.row)"
               v-show="scope.row.status===1">订单发货</el-button>
-            <el-button size="mini" type="danger" @click="handleRefound(scope.$index, scope.row)"
-              v-show="scope.row.status===1||scope.row.status===2||scope.row.status===3">手动退款</el-button>
+            <el-button size="mini" type="danger" @click="handleRefund(scope.$index, scope.row)"
+              v-show="scope.row.status===1">手动退款</el-button>
             <!-- <el-button size="mini" @click="handleViewLogistics(scope.$index, scope.row)"
               v-show="scope.row.status===2||scope.row.status===3">订单跟踪</el-button> -->
             <!-- <el-button size="mini" type="danger" @click="handleDeleteOrder(scope.$index, scope.row)"
               v-show="scope.row.status===4">删除订单</el-button> -->
           </template>
         </el-table-column>
+        <el-table-column label="直充结果" width="120" align="center">
+          <template slot-scope="scope">{{formatDirectCharge(scope.row)}}</template>
+        </el-table-column>
+        <el-table-column label="下单人手机号" width="180" align="center">
+          <template
+            slot-scope="scope">{{scope.row.moreInfo && maskPhoneNumber(JSON.parse(scope.row.moreInfo).payerPhone)}}</template>
+        </el-table-column>
+        <el-table-column label="订单金额" align="center">
+          <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
+        </el-table-column>
+        <el-table-column label="促销信息" align="center">
+          <template slot-scope="scope">{{scope.row.promotionInfo}}</template>
+        </el-table-column>
+        <el-table-column label="促销减免" align="center">
+          <template slot-scope="scope">{{scope.row.promotionAmount}}</template>
+        </el-table-column>
+        <el-table-column label="优惠券减免" align="center">
+          <template slot-scope="scope">{{scope.row.couponAmount}}</template>
+        </el-table-column>
+
+        <el-table-column label="订单来源" width="120" align="center">
+          <template slot-scope="scope">{{scope.row.sourceType | formatSourceType}}</template>
+        </el-table-column>
+        <el-table-column label="提交时间" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
+        </el-table-column>
+        <el-table-column label="订单编号" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.orderSn}}</template>
+        </el-table-column>
+
       </el-table>
     </div>
     <div class="batch-operate-container">
@@ -165,12 +165,11 @@
 </template>
 <script>
   import {
-    deliveryOrder
-  } from '@/api/order'
-  import {
+    deliveryOrder,
     fetchList,
     closeOrder,
-    deleteOrder
+    deleteOrder,
+    refundOrder
   } from '@/api/order'
   import {
     formatDate
@@ -303,8 +302,12 @@
           return '已关闭';
         } else if (value === 5) {
           return '无效订单';
-        } else {
-          return '待付款';
+        } else if (value == 6) {
+          return '退款中';
+        } else if (value == 7) {
+          return '已退款'
+        } else if (value == 0) {
+          return '待付款'
         }
       },
     },
@@ -366,8 +369,36 @@
         this.closeOrder.dialogVisible = true;
         this.closeOrder.orderIds = [row.id];
       },
-      handleRefound(index, row){
-        console.log(row)
+      handleRefund(index, row) {
+        this.$prompt('请输入退款说明', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          inputPattern: /.+/,
+          inputErrorMessage: '退款说明不能为空'
+        }).then((value) => {
+          // 用户点击了确定按钮后执行退款操作
+          refundOrder(row.id, value.value).then(resp => {
+            if (resp.code == 200) {
+              this.getList()
+              this.$message({
+                type: 'success',
+                message: resp.data
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: resp.message
+              });
+            }
+          })
+        }).catch(() => {
+          // 用户点击了取消按钮或者关闭了对话框
+          this.$message({
+            type: 'info',
+            message: '已取消退款'
+          });
+        });
       },
       handleDeliveryOrder(index, row) {
         let listItem = this.covertOrder(row);

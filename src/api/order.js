@@ -61,3 +61,10 @@ export function updateOrderNote(params) {
     params:params
   })
 }
+
+export function refundOrder(orderId,reason) {
+    return request({
+        method: 'POST',
+        url: '/order/refund/' + orderId+'?note='+reason
+    })
+}

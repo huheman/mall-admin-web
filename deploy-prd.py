@@ -3,7 +3,7 @@ from base import publish
 
 ip = '106.52.76.28'
 env='production'
-base_api='http://mallapi.huhp.cc/mall-admin'
+base_api='https://www.jikenow.cn/api/mall-admin'
 
 def main():
     publish(env,base_api,ip)

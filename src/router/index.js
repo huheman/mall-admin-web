@@ -25,6 +25,7 @@ export const constantRouterMap = [
     path: '',
     component: Layout,
     redirect: '/home',
+    hidden:true,
     meta: {title: '首页', icon: 'home'},
     children: [{
       path: 'home',
@@ -66,7 +67,7 @@ export const asyncRouterMap = [
         path: 'productCate',
         name: 'productCate',
         component: () => import('@/views/pms/productCate/index'),
-        meta: {title: '商品分类', icon: 'product-cate'}
+        meta: {title: '游戏分类', icon: 'product-cate'}
       },
       {
         path: 'addProductCate',
