@@ -93,7 +93,7 @@
           </el-table-column>
         </el-table>
       </el-form-item>
-      <el-form-item label="是否可领取：">
+      <el-form-item label="是否可领取：" v-if="coupon.type != 2">
         <el-radio-group v-model="couponStatus">
           <el-radio label="可领取">可领取</el-radio>
           <el-radio label="已失效">已失效</el-radio>
@@ -137,12 +137,12 @@
       label: '全场赠券',
       value: 0
     },
+    // {
+    //   label: '会员赠券',
+    //   value: 1
+    // },
     {
-      label: '会员赠券',
-      value: 1
-    },
-    {
-      label: '购物赠券',
+      label: '人工赠券',
       value: 2
     },
     {
@@ -220,7 +220,7 @@
       if (this.isEdit) {
         getCoupon(this.$route.query.id).then(response => {
           this.coupon = response.data;
-          this.couponStatus = this.coupon.note == '已失效'?'已失效':'生效中'
+          this.couponStatus = this.coupon.note == '已失效'?'已失效':'可领取'
         });
       }
       this.getProductCateList();

@@ -6,3 +6,9 @@ export function fetchList(params) {
     params:params
   })
 }
+export function giveCoupon(couponId,phone) {
+  return request({
+    url:'/couponHistory/giveCoupon?couponId='+couponId+'&phone='+phone,
+    method:'post',
+  })
+}

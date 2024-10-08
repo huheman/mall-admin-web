@@ -10,6 +10,9 @@
         <el-button style="float:right;margin-right: 15px" @click="handleResetSearch()" size="small">
           重置
         </el-button>
+        <el-button style="float:right;margin-right: 15px" type="primary" @click="handleDownload()" size="small">
+          下载
+        </el-button>
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
@@ -39,16 +42,14 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!--<el-form-item label="订单分类：">
-            <el-select v-model="listQuery.orderType" class="input-width" placeholder="全部" clearable>
-              <el-option v-for="item in orderTypeOptions"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
+          <el-form-item label="是否删除：">
+            <el-select v-model="listQuery.deleteStatus" class="input-width" placeholder="全部" clearable>
+              <el-option key="1" label="已删除" value="1"></el-option>
+              <el-option key="0" label="未删除" value="0">
               </el-option>
             </el-select>
           </el-form-item>
-           <el-form-item label="订单来源：">
+          <!--<el-form-item label="订单来源：">
             <el-select v-model="listQuery.sourceType" class="input-width" placeholder="全部" clearable>
               <el-option v-for="item in sourceTypeOptions"
                          :key="item.value"
@@ -107,8 +108,7 @@
           <template slot-scope="scope">{{formatDirectCharge(scope.row)}}</template>
         </el-table-column>
         <el-table-column label="下单人手机号" width="180" align="center">
-          <template
-            slot-scope="scope">{{scope.row.moreInfo && JSON.parse(scope.row.moreInfo).payerPhone}}</template>
+          <template slot-scope="scope">{{scope.row.moreInfo && JSON.parse(scope.row.moreInfo).payerPhone}}</template>
         </el-table-column>
         <el-table-column label="订单金额" align="center">
           <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
@@ -128,6 +128,12 @@
         </el-table-column>
         <el-table-column label="提交时间" width="180" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
+        </el-table-column>
+        <el-table-column label="发货时间" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.deliveryTime | formatCreateTime}}</template>
+        </el-table-column>
+        <el-table-column label="是否删除" width="180" align="center">
+          <template slot-scope="scope">{{scope.row.deleteStatus | formatDeleteStatus}}</template>
         </el-table-column>
         <el-table-column label="订单编号" width="180" align="center">
           <template slot-scope="scope">{{scope.row.orderSn}}</template>
@@ -272,8 +278,17 @@
     },
     filters: {
       formatCreateTime(time) {
+        if (!time) return ''
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatDeleteStatus(deleteStatus) {
+        if (deleteStatus == 0) {
+          return '未删除'
+        }
+        if (deleteStatus == 1) {
+          return '已删除'
+        }
       },
       formatPayType(value) {
         if (value === 1) {
@@ -312,6 +327,15 @@
       },
     },
     methods: {
+      handleDownload() {
+        const queryAsJson = JSON.stringify(this.listQuery);
+
+        // 将序列化的 JSON 字符串作为查询参数添加到 URL 中
+        const url = `${process.env.BASE_API}/order/download?query=${encodeURIComponent(queryAsJson)}`;
+
+        // 导航到新的 URL
+        window.location.href = url;
+      },
       formatTitle(row) {
         if (row.moreInfo) {
           return JSON.parse(row.moreInfo).title

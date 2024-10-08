@@ -123,7 +123,7 @@
       value: 1
     },
     {
-      label: '购物赠券',
+      label: '人工赠券',
       value: 2
     },
     {

@@ -41,12 +41,21 @@
         <i class="el-icon-search"></i>
         <span>筛选搜索</span>
         <el-button
+          v-if="coupon.type==2"
           style="float:right"
+          type="primary"
+          @click="manualAdd()"
+          size="small">
+          人工赠券
+        </el-button>
+        <el-button
+          style="float:right;margin-right: 15px"
           type="primary"
           @click="handleSearchList()"
           size="small">
           查询搜索
         </el-button>
+
         <el-button
           style="float:right;margin-right: 15px"
           @click="handleResetSearch()"
@@ -116,7 +125,7 @@
 <script>
   import {formatDate} from '@/utils/date';
   import {getCoupon} from '@/api/coupon';
-  import {fetchList as fetchCouponHistoryList} from '@/api/couponHistory';
+  import {fetchList as fetchCouponHistoryList,giveCoupon} from '@/api/couponHistory';
 
   const defaultTypeOptions = [
     {
@@ -243,6 +252,37 @@
       },
     },
     methods: {
+      manualAdd(){
+        this.$prompt('请输入要赠券的手机号', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          inputPattern: /^[0-9]{11}$/,
+          inputErrorMessage: '赠券手机号不能为空，且必须为数字'
+        }).then((value) => {
+          // 用户点击了确定按钮后执行退款操作
+          giveCoupon(this.coupon.id,value.value).then(resp => {
+            if (resp.code == 200) {
+              this.getList()
+              this.$message({
+                type: 'success',
+                message: '赠券成功'
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: resp.message
+              });
+            }
+          })
+        }).catch(() => {
+          // 用户点击了取消按钮或者关闭了对话框
+          this.$message({
+            type: 'info',
+            message: '已取消赠券'
+          });
+        });
+      },
       getList(){
         this.listLoading=true;
         fetchCouponHistoryList(this.listQuery).then(response=>{
