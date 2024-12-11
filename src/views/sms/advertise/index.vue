@@ -156,6 +156,10 @@
     {
       label: 'APP首页轮播',
       value: 1
+    },
+    {
+      label: '其他',
+      value: 2
     }
   ];
   export default {
@@ -184,8 +188,10 @@
       formatType(type){
         if(type===1){
           return 'APP首页轮播';
-        }else{
+        }else if (type==0){
           return 'APP底部宣传';
+        }else {
+          return '其他'
         }
       },
       formatTime(time){

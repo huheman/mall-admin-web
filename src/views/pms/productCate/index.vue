@@ -24,12 +24,6 @@
         <el-table-column label="级别" width="100" align="center">
           <template slot-scope="scope">{{scope.row.level | levelFilter}}</template>
         </el-table-column>
-        <!-- <el-table-column label="商品数量" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.productCount }}</template>
-        </el-table-column>
-        <el-table-column label="数量单位" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.productUnit }}</template>
-        </el-table-column> -->
         <el-table-column label="游戏页推荐" width="100" align="center">
           <template slot-scope="scope">
             <el-switch

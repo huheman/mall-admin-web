@@ -347,10 +347,10 @@
     },
     handleEditCreated() {
       //根据商品属性分类id获取属性和参数
-      if (this.value.productAttributeCategoryId != null) {
+      if (this.value && this.value.productAttributeCategoryId != null) {
         this.handleProductAttrChange(this.value.productAttributeCategoryId);
       }
-      if (this.value.productCategoryId != null) {
+      if (this.value && this.value.productCategoryId != null) {
         this.selectProductCateValue = []
         this.selectProductCateValue.push(this.value.cateParentId);
         this.selectProductCateValue.push(this.value.productCategoryId);
@@ -525,12 +525,20 @@
             values.add(spData[1].value);
           }
         }
-      } else {
+      } else  if (index === 2) {
         for (let i = 0; i < this.value.skuStockList.length; i++) {
           let sku = this.value.skuStockList[i];
           let spData = JSON.parse(sku.spData);
           if (spData != null && spData.length >= 3) {
             values.add(spData[2].value);
+          }
+        }
+      } else {
+        for (let i = 0; i < this.value.skuStockList.length; i++) {
+          let sku = this.value.skuStockList[i];
+          let spData = JSON.parse(sku.spData);
+          if (spData != null && spData.length >= 4) {
+            values.add(spData[3].value);
           }
         }
       }
@@ -681,10 +689,65 @@
             });
           }
         }
-      } else {
+      } else  if (this.selectProductAttr.length === 3) {
         let attr0 = this.selectProductAttr[0];
         let attr1 = this.selectProductAttr[1];
         let attr2 = this.selectProductAttr[2];
+        for (let i = 0; i < attr0.values.length; i++) {
+          if (attr1.values.length === 0) {
+            skuList.push({
+              spData: JSON.stringify([{
+                key: attr0.name,
+                value: attr0.values[i]
+              }])
+            });
+            continue;
+          }
+          for (let j = 0; j < attr1.values.length; j++) {
+            if (attr2.values.length === 0) {
+              let spData = [];
+              spData.push({
+                key: attr0.name,
+                value: attr0.values[i]
+              });
+              spData.push({
+                key: attr1.name,
+                value: attr1.values[j]
+              });
+              skuList.push({
+                spData: JSON.stringify(spData),
+                stock:'999',
+                lowStock:'10'
+              });
+              continue;
+            }
+            for (let k = 0; k < attr2.values.length; k++) {
+              let spData = [];
+              spData.push({
+                key: attr0.name,
+                value: attr0.values[i]
+              });
+              spData.push({
+                key: attr1.name,
+                value: attr1.values[j]
+              });
+              spData.push({
+                key: attr2.name,
+                value: attr2.values[k]
+              });
+              skuList.push({
+                spData: JSON.stringify(spData),
+                stock:'999',
+                lowStock:'10'
+              });
+            }
+          }
+        }
+      }else if (this.selectProductAttr.length === 4) {
+        let attr0 = this.selectProductAttr[0];
+        let attr1 = this.selectProductAttr[1];
+        let attr2 = this.selectProductAttr[2];
+        let attr3 = this.selectProductAttr[3];
         for (let i = 0; i < attr0.values.length; i++) {
           if (attr1.values.length === 0) {
             skuList.push({
@@ -712,24 +775,52 @@
               continue;
             }
             for (let k = 0; k < attr2.values.length; k++) {
-              let spData = [];
-              spData.push({
-                key: attr0.name,
-                value: attr0.values[i]
-              });
-              spData.push({
-                key: attr1.name,
-                value: attr1.values[j]
-              });
-              spData.push({
-                key: attr2.name,
-                value: attr2.values[k]
-              });
-              skuList.push({
-                spData: JSON.stringify(spData),
-                stock:'999',
-                lowStock:'10'
-              });
+              if (attr3.values.length === 0) {
+                let spData = [];
+                spData.push({
+                  key: attr0.name,
+                  value: attr0.values[i]
+                });
+                spData.push({
+                  key: attr1.name,
+                  value: attr1.values[j]
+                });
+                spData.push({
+                  key: attr2.name,
+                  value: attr2.values[k]
+                });
+                skuList.push({
+                  spData: JSON.stringify(spData),
+                  stock:'999',
+                  lowStock:'10'
+                });
+                continue;
+              }
+              for (let l = 0; l < attr3.values.length; l++) {
+                let spData = [];
+                spData.push({
+                  key: attr0.name,
+                  value: attr0.values[i]
+                });
+                spData.push({
+                  key: attr1.name,
+                  value: attr1.values[j]
+                });
+                spData.push({
+                  key: attr2.name,
+                  value: attr2.values[k]
+                });
+                spData.push({
+                  key: attr3.name,
+                  value: attr3.values[l]
+                });
+                skuList.push({
+                  spData: JSON.stringify(spData),
+                  stock:'999',
+                  lowStock:'10'
+                });
+              }
+
             }
           }
         }

@@ -17,6 +17,7 @@
         </template>
 
         <template v-for="child in item.children" v-if="!child.hidden">
+
           <sidebar-item :is-nest="true" class="nest-menu" v-if="child.children&&child.children.length>0" :routes="[child]" :key="child.path"></sidebar-item>
           <!--支持外链功能-->
           <a v-else-if="child.path.startsWith('http')" v-bind:href="child.path" target="_blank" :key="child.name">

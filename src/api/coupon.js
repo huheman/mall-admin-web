@@ -36,3 +36,20 @@ export function deleteCoupon(id) {
     method:'post',
   })
 }
+
+export function fetchKol(query) {
+  return request({
+    url: '/kol/list',
+    method:'post',
+    data:query
+  })
+
+}
+
+export function createKol(data) {
+  return request({
+    url: '/kol/create',
+    method:'post',
+    data:data
+  })
+}

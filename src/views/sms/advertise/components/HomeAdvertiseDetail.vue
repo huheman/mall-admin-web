@@ -73,7 +73,11 @@
     {
       label: 'APP首页轮播',
       value: 1
-    }
+    },
+    {
+      label: '其他',
+      value: 2
+    },
   ];
   const defaultHomeAdvertise = {
     name: null,

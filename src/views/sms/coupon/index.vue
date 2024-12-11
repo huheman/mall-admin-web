@@ -129,6 +129,10 @@
     {
       label: '注册赠券',
       value: 3
+    },
+    {
+      label: '邀请赠券',
+      value: 4
     }
   ];
   export default {

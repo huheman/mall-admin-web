@@ -113,6 +113,15 @@
         <el-table-column label="订单金额" align="center">
           <template slot-scope="scope">￥{{scope.row.totalAmount}}</template>
         </el-table-column>
+        <el-table-column label="订单来源" width="180" align="center">
+          <template slot-scope="scope">{{ parseSourceType(scope.row.sourceType)}}</template>
+        </el-table-column>
+        <el-table-column label="推荐kol" width="180" align="center">
+          <template slot-scope="scope">{{ scope.row.kolId}}</template>
+        </el-table-column>
+        <el-table-column label="操作系统" width="180" align="center">
+          <template slot-scope="scope">{{ scope.row.moreInfo && JSON.parse(scope.row.moreInfo).platform}}</template>
+        </el-table-column>
         <el-table-column label="促销信息" align="center">
           <template slot-scope="scope">{{scope.row.promotionInfo}}</template>
         </el-table-column>
@@ -123,9 +132,6 @@
           <template slot-scope="scope">{{scope.row.couponAmount}}</template>
         </el-table-column>
 
-        <el-table-column label="订单来源" width="120" align="center">
-          <template slot-scope="scope">{{scope.row.sourceType | formatSourceType}}</template>
-        </el-table-column>
         <el-table-column label="提交时间" width="180" align="center">
           <template slot-scope="scope">{{scope.row.createTime | formatCreateTime}}</template>
         </el-table-column>
@@ -277,6 +283,7 @@
       this.getList();
     },
     filters: {
+
       formatCreateTime(time) {
         if (!time) return ''
         let date = new Date(time);
@@ -297,13 +304,6 @@
           return '微信';
         } else {
           return '未支付';
-        }
-      },
-      formatSourceType(value) {
-        if (value === 1) {
-          return 'APP订单';
-        } else {
-          return 'PC订单';
         }
       },
       formatStatus(value) {
@@ -327,6 +327,17 @@
       },
     },
     methods: {
+      parseSourceType(sourceType){
+        if(sourceType==0) {
+          return '手机浏览器'
+        }else if (sourceType == 1) {
+          return '微信小程序'
+        }else if (sourceType == 2) {
+          return '微信H5'
+        }else if (sourceType==3) {
+          return '电脑浏览器'
+        }
+      },
       handleDownload() {
         const queryAsJson = JSON.stringify(this.listQuery);
 

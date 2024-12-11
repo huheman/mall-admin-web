@@ -230,8 +230,10 @@
       formatGetType(type) {
         if(type===1){
           return '主动获取';
-        }else{
+        }else if(type ===2){
           return '后台赠送';
+        }else if (type ===3) {
+          return '邀请赠券'
         }
       },
       formatCouponHistoryUseType(useType) {

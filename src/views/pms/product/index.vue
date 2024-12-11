@@ -19,7 +19,7 @@
           <el-form-item label="商品货号：" v-show="false">
             <el-input style="width: 203px" v-model="listQuery.productSn" placeholder="商品货号"></el-input>
           </el-form-item>
-          <el-form-item label="商品分类：">
+          <el-form-item label="游戏分类：">
             <el-cascader clearable v-model="selectProductCateValue" :options="productCateOptions">
             </el-cascader>
           </el-form-item>

@@ -31,7 +31,7 @@ def publish(env:str,base_api:str,ip:str):
     commands = [
       "npm run build",
         f"ssh root@{ip} \"rm -fr /root/env_dev/nginx/html/mall-admin-new\"",
-        f"scp -r ./dist/ root@{ip}:/root/env_dev/nginx/html/mall-admin-new/",
+        f"scp -r ./dist/ root@{ip}:/root/env_dev/nginx/html/mall-admin-new",
         f"ssh root@{ip} \"mv /root/env_dev/nginx/html/mall-admin /root/env_dev/nginx/html/mall-admin-old\"",
         f"ssh root@{ip} \"mv /root/env_dev/nginx/html/mall-admin-new /root/env_dev/nginx/html/mall-admin\"",
         f"ssh root@{ip} \"rm -fr /root/env_dev/nginx/html/mall-admin-old\""

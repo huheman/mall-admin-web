@@ -54,7 +54,8 @@ export const asyncRouterMap = [
         path: 'addProduct',
         name: 'addProduct',
         component: () => import('@/views/pms/product/add'),
-        meta: {title: '添加商品', icon: 'product-add'}
+        meta: {title: '添加商品', icon: 'product-add'},
+        hidden: true
       },
       {
         path: 'updateProduct',
@@ -67,7 +68,8 @@ export const asyncRouterMap = [
         path: 'productCate',
         name: 'productCate',
         component: () => import('@/views/pms/productCate/index'),
-        meta: {title: '游戏分类', icon: 'product-cate'}
+        meta: {title: '游戏分类', icon: 'product-cate'},
+
       },
       {
         path: 'addProductCate',
@@ -224,7 +226,13 @@ export const asyncRouterMap = [
         path: 'coupon',
         name: 'coupon',
         component: () => import('@/views/sms/coupon/index'),
-        meta: {title: '优惠券列表', icon: 'sms-coupon'}
+        meta: {title: '优惠券列表', icon: 'sms-hot'}
+      },
+      {
+        path: 'kol',
+        name: 'kol',
+        component: () => import('@/views/sms/kol/index'),
+        meta: {title: '博主引流', icon: 'sms-coupon'}
       },
       {
         path: 'addCoupon',
